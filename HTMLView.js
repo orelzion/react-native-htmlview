@@ -1,14 +1,16 @@
 import React, {Component, PropTypes} from 'react';
 import htmlToElement from './htmlToElement';
-import {
-  Linking,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Linking, StyleSheet, View, Text} from 'react-native';
 
-const boldStyle = {fontWeight: '500'};
-const italicStyle = {fontStyle: 'italic'};
-const codeStyle = {fontFamily: 'Menlo'};
+const boldStyle = {
+  fontWeight: '500'
+};
+const italicStyle = {
+  fontStyle: 'italic'
+};
+const codeStyle = {
+  fontFamily: 'Menlo'
+};
 
 const baseStyles = StyleSheet.create({
   b: boldStyle,
@@ -19,21 +21,39 @@ const baseStyles = StyleSheet.create({
   code: codeStyle,
   a: {
     fontWeight: '500',
-    color: '#007AFF',
+    color: '#007AFF'
   },
-  h1: {fontWeight: '500', fontSize: 36},
-  h2: {fontWeight: '500', fontSize: 30},
-  h3: {fontWeight: '500', fontSize: 24},
-  h4: {fontWeight: '500', fontSize: 18},
-  h5: {fontWeight: '500', fontSize: 14},
-  h6: {fontWeight: '500', fontSize: 12},
+  h1: {
+    fontWeight: '500',
+    fontSize: 36
+  },
+  h2: {
+    fontWeight: '500',
+    fontSize: 30
+  },
+  h3: {
+    fontWeight: '500',
+    fontSize: 24
+  },
+  h4: {
+    fontWeight: '500',
+    fontSize: 18
+  },
+  h5: {
+    fontWeight: '500',
+    fontSize: 14
+  },
+  h6: {
+    fontWeight: '500',
+    fontSize: 12
+  }
 });
 
 class HtmlView extends Component {
   constructor() {
     super();
     this.state = {
-      element: null,
+      element: null
     };
   }
 
@@ -57,16 +77,22 @@ class HtmlView extends Component {
       this.setState({element: null});
     }
 
+    const fontSize = StyleSheet.flatten(this.props.stylesheet.default).fontSize;
+
     const opts = {
       addLineBreaks: this.props.addLineBreaks,
       linkHandler: this.props.onLinkPress,
       styles: Object.assign({}, baseStyles, this.props.stylesheet),
       customRenderer: this.props.renderNode,
+      rtlText: this.props.rtlText,
+      textSize: fontSize
     };
 
     htmlToElement(value, opts, (err, element) => {
       if (err) {
-        this.props.onError(err);
+        this
+          .props
+          .onError(err);
       }
 
       if (this.mounted) {
@@ -77,9 +103,9 @@ class HtmlView extends Component {
 
   render() {
     if (this.state.element) {
-      return <View children={this.state.element} style={this.props.style} />;
+      return <View children={this.state.element} style={this.props.style}/>;
     }
-    return <View style={this.props.style} />;
+    return <View style={this.props.style}/>;
   }
 }
 
@@ -91,12 +117,16 @@ HtmlView.propTypes = {
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
   renderNode: PropTypes.func,
+  rtlText: PropTypes.bool
 };
 
 HtmlView.defaultProps = {
   addLineBreaks: true,
   onLinkPress: url => Linking.openURL(url),
-  onError: console.error.bind(console),
+  onError: console
+    .error
+    .bind(console),
+  rtlText: false
 };
 
 export default HtmlView;

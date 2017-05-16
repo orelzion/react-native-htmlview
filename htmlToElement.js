@@ -91,8 +91,26 @@ export default function htmlToElement(rawHtml, opts, done) {
           }
         }
 
+        let textColor
+        if (node.name == 'font') {
+          textColor = node.attribs['color']
+        }
+
+        let fontSize = opts.textSize
+        if (node.name == 'small') {
+          fontSize = fontSize - 4
+        }
+        if (node.name == 'big') {
+          fontSize = fontSize + 4
+        }
+
         return (
-          <Text key={index} onPress={linkPressHandler}>
+          <Text key={index} onPress={linkPressHandler}
+            style={Object.assign({},
+            opts.rtlText && { textAlign: 'right' },
+            textColor && { color: `${textColor}` },
+            fontSize && {fontSize: fontSize}
+            )}>
             {linebreakBefore}
             {listItemPrefix}
             {domToElement(node.children, node)}
@@ -111,4 +129,3 @@ export default function htmlToElement(rawHtml, opts, done) {
   parser.write(rawHtml);
   parser.done();
 }
-
